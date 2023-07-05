@@ -1,0 +1,64 @@
+server:
+  port: 8081
+spring:
+  application:
+    #    user服务名称
+    name: orderservice
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/springcloud2?useSSL=false
+    username: root
+    password: yswysyydxj
+    driver-class-name: com.mysql.jdbc.Driver
+
+  cloud:
+    nacos:
+      server-addr: localhost:8848 #nacos服务的地址
+      discovery:
+        cluster-name: yuhan  #集群名称
+#        ephemeral: false # 设置为非临时实例
+
+
+#设置userservice服务优先访问本地集群
+userservice:
+  ribbon:
+    NFLoadBalancerRuleClassName:  com.alibaba.cloud.nacos.ribbon.NacosRule # 负载均衡规则
+
+
+
+
+
+mybatis:
+  type-aliases-package: cn.itcast.user.pojo
+  configuration:
+    map-underscore-to-camel-case: true
+logging:
+  level:
+    cn.itcast: debug
+  pattern:
+    dateformat: MM-dd HH:mm:ss:SSS
+
+#eureka作服务注册才配置的信息
+#eureka:
+#  client:
+#    service-url: #eureka地址名称
+#      #      多个的话用逗号隔开
+#      defaultZone: http://127.0.0.1:10086/eureka
+
+ribbon:
+  eager-load:
+    enabled: true   #开启饥饿加载
+    clients: userservice  #指定对userservice这个服务进行饥饿加载
+
+  #feign配置
+feign:
+  client:
+    config:
+      default: #default是全局配置，写服务名称就是针对某个微服务的配置
+        loggerLevel: BASIC #日志基本
+
+  #连接池的配置
+  httpclient:
+    enabled: true  #开启feign对httpClient的支持
+    max-connections: 200  #最大连接数
+    max-connections-per-route: 50  #每个路径的最大连接数

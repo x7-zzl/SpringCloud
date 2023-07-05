@@ -1,0 +1,40 @@
+server:
+  port: 8080
+
+spring:
+#  application:
+#    #    user服务名称
+#    name: userservice
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/springcloud1?useSSL=false
+    username: root
+    password: yswysyydxj
+    driver-class-name: com.mysql.jdbc.Driver
+
+
+#  cloud:
+#    nacos:
+#      server-addr: localhost:8848 #nacos服务的地址
+#      discovery:
+#        cluster-name: yuhan  #集群名称
+
+mybatis:
+#  意味着MyBatis会自动扫描该包下的类并为其生成别名
+  type-aliases-package: cn.itcast.user.pojo
+#  决定了是否将数据库中的下划线命名转换为驼峰命名。如果设置为true，则表示开启了下划线转驼峰的功能
+  configuration:
+    map-underscore-to-camel-case: true
+
+logging:
+  level:
+    cn.itcast: debug
+  pattern:
+    dateformat: MM-dd HH:mm:ss:SSS
+
+#eureka作服务注册才配置的信息
+#eureka:
+#  client:
+#    service-url: #eureka地址名称
+#      #      多个的话用逗号隔开
+#      defaultZone: http://127.0.0.1:10086/eureka

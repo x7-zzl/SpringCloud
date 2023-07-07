@@ -1,0 +1,38 @@
+server:
+  port: 10010 #网关端口
+
+spring:
+  application:
+    name: gateway #服务名称
+  cloud:
+    nacos:
+      server-addr: localhost:8848 #nacos地址
+
+    gateway:
+      routes: #网关路由配置
+        - id: user-service #路由id，自定义，唯一即可
+          #          uri: http://127.0.0.1:8081 #路由的目标地址，http就是固定的地址
+          uri: lb://userservice #路由的目标地址，lb是负载均衡，后面跟服务名称
+          predicates: #路由断言，也就是判断请求是否符合路由规则的条件
+            - Path=/user/**  #按照路径匹配，只要是以/user/开头就符合要求
+            #12种路由断言工厂
+            #after在...之后；before在...之前，符合要求进行路由，常用path
+#            - After=2023-09-06T18:42:30.000+08:00[Asia/Shanghai]  #上海时区，符合这个时间的请求才接受
+        #          filters:
+        #            - AddRequestHeader=Truth,Itcast is freaking aowsome #添加请求头
+
+        - id: order-service     #路由id
+          uri: lb://orderservice
+          predicates:
+            - Path=/order/**
+      #            - After=2023-09-06T18:42:30.000+08:00[Asia/Shanghai]  #上海时区，符合这个时间的请求才接受
+
+      default-filters: #全局配置默认过滤器，对全局都生效
+        - AddRequestHeader=Truth, Itcast is freaking aowsome!   #添加请求头
+
+logging:
+  level:
+    cn.itcast: debug
+
+  pattern:
+    dateformat: MM-dd HH:mm:ss:SSS
